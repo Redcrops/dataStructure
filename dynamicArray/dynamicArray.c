@@ -9,9 +9,13 @@ enum STATUS_CODE
     ON_SUCCESS,
     NULL_PTR,
     MALLOC_ERROR,
+    INVAILD_ACCESS,
 };
 
 #define DEFAULT_SIZE 10
+
+// 静态函数前置声明
+static expandDynamicCapacity(dynamicArray *pArray);
 
 // 动态数组初始化
 int dynamicArrayInit(dynamicArray *pArray, int capacity)
@@ -40,10 +44,84 @@ int dynamicArrayInit(dynamicArray *pArray, int capacity)
 }
 
 // 动态数组插入数据(默认插入到数组的末尾)
-int dynamicArrayInsertData(dynamicArray *pArray, ELEMENTTYPE val);
+int dynamicArrayInsertData(dynamicArray *pArray, ELEMENTTYPE val)
+{
+    dynamicArrayAppointPosInsertData(pArray, pArray->len, val);
+}
+
+// 动态数组扩容
+static int expandDynamicCapacity(dynamicArray *pArray)
+{
+    int ret = 0;
+    int needExpandCapacity = pArray->capacity + (pArray->capacity >> 1);
+
+    // 备份指针
+    ELEMENTTYPE *tmpPtr = pArray;
+    pArray->data = (ELEMENTTYPE *)malloc(sizeof(ELEMENTTYPE) * needExpandCapacity);
+
+    // 判malloc空
+    if (!pArray->data)
+    {
+        return MALLOC_ERROR;
+    }
+
+    // 拷贝之前的数据
+    for (int idx = 0; idx < pArray->len; idx++)
+    {
+        pArray->data[idx] = tmpPtr[idx];
+    }
+    // memcpy(pArray->data,tmpPtr,sizeof(tmpPtr));
+
+//释放之前的内存，避免内存泄漏
+    if (tmpPtr)
+    {
+        free(tmpPtr);
+        tmpPtr = NULL;
+    }
+
+    pArray->capacity = needExpandCapacity;
+    return 0;
+}
 
 // 动态数组插入数据，在指定位置插入
-int dynamicArrayAppointPosInsertData(dynamicArray *pArray, int pos, ELEMENTTYPE val);
+int dynamicArrayAppointPosInsertData(dynamicArray *pArray, int pos, ELEMENTTYPE val)
+{
+    // 指针判空
+    if (!pArray)
+    {
+        return NULL_PTR;
+    }
+
+    // 判断位置的合法性
+    if (pos < 0 || pos > pArray->len)
+    {
+        return INVAILD_ACCESS;
+    }
+
+    // 扩容的临界值是len大于容量的三分之二
+    if (pArray->len + (pArray->len >> 1) > pArray->capacity)
+    {
+        // 开始扩容
+        expandDynamicCapacity(pArray);
+    }
+#if 0 // 会覆盖
+    // while (pos<pArray->len)
+    // {
+    //     pArray->data[pos+1] = pArray->data[pos];
+    //     pos++;
+    // }
+#endif
+
+    // 数据从数组尾部后移一位，腾出pos位置
+    for (int idx = pArray->len; idx > pos; idx--)
+    {
+        pArray->data[idx] = pArray->data[idx - 1];
+    }
+
+    // 找到对应值，写入数组中
+    pArray->data[pos] = val;
+    (pArray->len)++;
+}
 
 // 动态数组修改指定位置的数据
 int dynamicArrayAppointPosData(dynamicArray *pArray, int pos, ELEMENTTYPE val);
