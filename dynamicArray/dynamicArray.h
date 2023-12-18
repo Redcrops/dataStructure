@@ -14,7 +14,7 @@ typedef struct dynamicArray
 // API：application pragram inferface
 
 // 动态数组初始化
-int dynamicArrayInit(dynamicArray *pArray,int capacity);
+int dynamicArrayInit(dynamicArray *pArray, int capacity);
 
 // 动态数组插入数据(默认插入到数组的末尾)
 int dynamicArrayInsertData(dynamicArray *pArray, ELEMENTTYPE val);
@@ -42,5 +42,8 @@ int dynamicArrayGetSize(dynamicArray *pArray, int *pSize);
 
 // 获取数组的容量
 int dynamicArrayGetCapacity(dynamicArray *pArray, int *pCapacity);
+
+//获取指定位置数值
+int dynamicArrayGetAppointPosVal(dynamicArray *pArray, int pos, ELEMENTTYPE *pVal);
 
 #endif //__DANAMIC_ARRAY_H_

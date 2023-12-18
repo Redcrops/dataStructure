@@ -15,7 +15,7 @@ enum STATUS_CODE
 #define DEFAULT_SIZE 10
 
 // 静态函数前置声明
-static expandDynamicCapacity(dynamicArray *pArray);
+static int expandDynamicCapacity(dynamicArray *pArray);
 
 // 动态数组初始化
 int dynamicArrayInit(dynamicArray *pArray, int capacity)
@@ -56,9 +56,8 @@ static int expandDynamicCapacity(dynamicArray *pArray)
     int needExpandCapacity = pArray->capacity + (pArray->capacity >> 1);
 
     // 备份指针
-    ELEMENTTYPE *tmpPtr = pArray;
+    ELEMENTTYPE *tmpPtr = pArray->data;
     pArray->data = (ELEMENTTYPE *)malloc(sizeof(ELEMENTTYPE) * needExpandCapacity);
-
     // 判malloc空
     if (!pArray->data)
     {
@@ -157,10 +156,10 @@ static int shrinkDynamicCapacity(dynamicArray *pArray)
     int needShrinkCapacity = pArray->capacity - (pArray->capacity >> 1);
 
     // 拷贝指针
-    ELEMENTTYPE *tmpPtr = pArray;
+    ELEMENTTYPE *tmpPtr = pArray->data;
     pArray->data = (ELEMENTTYPE *)malloc(sizeof(ELEMENTTYPE) * needShrinkCapacity);
     // 判malloc空
-    if (!tmpPtr)
+    if (!pArray->data)
     {
         return MALLOC_ERROR;
     }
@@ -220,7 +219,7 @@ int dynamicArrayDeleteAppointData(dynamicArray *pArray, ELEMENTTYPE val)
     }
     for (int idx = pArray->len - 1; idx >= 0; idx--)
     {
-        if (val == pArray->data)
+        if (val == pArray->data[idx])
         {
 
             dynamicArrayDeleteAppointPosData(pArray, idx);
@@ -256,7 +255,7 @@ int dynamicArrayGetSize(dynamicArray *pArray, int *pSize)
         return NULL_PTR;
     }
 
-    if (!pSize)
+    if (pSize)
     {
         *pSize = pArray->len;
     }
@@ -278,4 +277,24 @@ int dynamicArrayGetCapacity(dynamicArray *pArray, int *pCapacity)
     }
 
     return ON_SUCCESS;
+}
+
+// 获取指定位置的元素数据
+int dynamicArrayGetAppointPosVal(dynamicArray *pArray, int pos, ELEMENTTYPE *pVal)
+{
+
+    if (pArray == NULL)
+    {
+        return NULL_PTR;
+    }
+
+    if (pos < 0 || pos > pArray->len)
+    {
+        return INVAILD_ACCESS;
+    }
+
+    if (pVal)
+    {
+        return pArray->data[pos];
+    }
 }
