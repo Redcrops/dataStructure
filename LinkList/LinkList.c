@@ -144,6 +144,11 @@ int LinkListDelAppointPos(LinkList *pList, int pos)
 {
     checkPlist(pList);
     checkPos(pList, pos);
+    int flag = 0;
+    if (pos == pList->len)
+    {
+        flag = 1;
+    }
     LinkNode *travelNode = pList->head;
     while (--pos)
     {
@@ -151,6 +156,10 @@ int LinkListDelAppointPos(LinkList *pList, int pos)
     }
     LinkNode *needDelNode = travelNode->next;
     travelNode->next = needDelNode->next;
+    if (flag) 
+    {
+        pList->tail = travelNode;
+    }
 
     if (needDelNode != NULL)
     {
@@ -161,6 +170,7 @@ int LinkListDelAppointPos(LinkList *pList, int pos)
     (pList->len)--;
     return ON_SUCCESS;
 }
+
 // 根据指定元素得到在链表中所在的位置
 static int LinkListAccordAppointValGetPos(LinkList *pList, ELEMENTTYPE val, int *pPos)
 {
@@ -178,6 +188,7 @@ static int LinkListAccordAppointValGetPos(LinkList *pList, ELEMENTTYPE val, int 
     *pPos = NOT_FIND;
     return NOT_FIND;
 }
+
 // 链表删除指定数据
 int LinkListDelAppointData(LinkList *pList, ELEMENTTYPE val)
 {
