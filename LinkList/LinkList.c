@@ -1,8 +1,45 @@
 #include "LinkList.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
+enum STATUS_CODE
+{
+    ON_SUCCESS,
+    NULL_PTR,
+    MALLOC_ERROR,
+    INVAILD_ACCESS,
+};
 // 链表初始化
 int LinkListInit(LinkList **pList)
 {
+    // 分配内存，判空，初始化
+    LinkList *list = (LinkList *)malloc(sizeof(LinkList) * 1);
+
+    if (list == NULL)
+    {
+        return MALLOC_ERROR;
+    }
+    // 清空脏数据
+    memset(list, 0, sizeof(LinkList) * 1);
+
+    list->head = (LinkNode *)malloc(sizeof(LinkNode) * 1);
+    if (list->head == NULL)
+    {
+        return MALLOC_ERROR;
+    }
+    // 清空脏数据
+    memset(list->head, 0, sizeof(LinkNode) * 1);
+
+    // 链表长度为0
+    list->len = 0;
+
+    list->head->data = 0;
+    list->head->next = NULL;
+
+    // 二级指针
+    *pList = pList;
+    return ON_SUCCESS;
 }
 
 // 链表头插
