@@ -40,6 +40,9 @@ int LinkListInit(LinkList **pList)
     list->head->data = 0;
     list->head->next = NULL;
 
+    // 初始化的时候尾指针=头指针
+    list->tail = list->head;
+
     // 二级指针
     *pList = list;
     return ON_SUCCESS;
@@ -54,7 +57,7 @@ int LinkListHeadInsert(LinkList *pList, ELEMENTTYPE val)
 // 链表尾插
 int LinkListTailInsert(LinkList *pList, ELEMENTTYPE val)
 {
-    return LinkListAppointPosInsert(pList, pList->len - 1, val);
+    return LinkListAppointPosInsert(pList, pList->len, val);
 }
 static int checkPlist(LinkList *pList)
 {
@@ -84,20 +87,36 @@ int LinkListAppointPosInsert(LinkList *pList, int pos, ELEMENTTYPE val)
     checkPlist(pList);
     checkPos(pList, pos);
     LinkNode *travelNode = pList->head;
-    while (pos)
-    {
-        travelNode = travelNode->next;
-        pos--;
-    }
     LinkNode *newNode = (LinkNode *)malloc(sizeof(LinkNode) * 1);
     checkMallocNode(newNode);
-
-    newNode->data = 0;
-    newNode->next = NULL;
-
+    int flag = 0;
+    // 这种情况下需要更改尾指针
+    if (pos = pList->len)
+    {
+        travelNode = pList->tail;
+        // newNode->next = travelNode->next;
+        // travelNode->next = newNode;
+        flag = 1;
+    }
+    else
+    {
+        while (pos)
+        {
+            travelNode = travelNode->next;
+            pos--;
+        }
+    }
     // 修改节点指向
     newNode->next = travelNode->next;
     travelNode->next = newNode;
+    if (flag)
+    {
+        //尾指针更新
+        pList->tail = newNode;
+    }
+
+    newNode->data = 0;
+    newNode->next = NULL;
 
     // 更新链表长度
     pList->len++;
@@ -144,9 +163,9 @@ int LinkListDestroy(LinkList *pList)
 int linkListforeach(LinkList *pList)
 {
     checkPlist(pList);
-    // LinkNode *travelNode = pList->head;
-     LinkNode *travelNode = pList->head->next;
-#if 0//for
+    // LinkNode *travelNode = pList->head;//两种遍历方式
+    LinkNode *travelNode = pList->head->next;
+#if 0 // for
     // for(int idx=0;idx<pList->len;idx++){
     //     printf("data=%d\n",travelNode->data);
     //     travelNode=travelNode->next;

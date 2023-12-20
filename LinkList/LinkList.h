@@ -14,7 +14,7 @@ typedef struct LinkList
 {
     // 链表的虚拟头结点，数据域无意义，只使用指针域
     LinkNode *head;
-
+    LinkList *tail;//为什么尾指针不需要分配空间
     // 链表的长度
     int len;
 } LinkList;
@@ -23,13 +23,13 @@ typedef struct LinkList
 int LinkListInit(LinkList **pList);
 
 // 链表头插
-int LinkListHeadInsert(LinkList *pList,ELEMENTTYPE val);
+int LinkListHeadInsert(LinkList *pList, ELEMENTTYPE val);
 
 // 链表尾插
-int LinkListTailInsert(LinkList *pList,ELEMENTTYPE val);
+int LinkListTailInsert(LinkList *pList, ELEMENTTYPE val);
 
 // 链表指定位置插入
-int LinkListAppointPosInsert(LinkList *pList,int pos, ELEMENTTYPE val);
+int LinkListAppointPosInsert(LinkList *pList, int pos, ELEMENTTYPE val);
 
 // 链表头删
 int LinkListHeadDel(LinkList *pList);
@@ -38,13 +38,13 @@ int LinkListHeadDel(LinkList *pList);
 int LinkListTailDel(LinkList *pList);
 
 // 链表指定位置删除
-int LinkListDelAppointPos(LinkList *pList,int pos);
+int LinkListDelAppointPos(LinkList *pList, int pos);
 
 // 链表删除指定数据
-int LinkListDelAppointData(LinkList *pList,ELEMENTTYPE val);
+int LinkListDelAppointData(LinkList *pList, ELEMENTTYPE val);
 
 // 获取链表长度
-int LinkListGetLength(LinkList *pList,int *pSize);
+int LinkListGetLength(LinkList *pList, int *pSize);
 
 // 链表销毁
 int LinkListDestroy(LinkList *pList);
