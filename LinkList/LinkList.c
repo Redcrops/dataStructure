@@ -5,15 +5,19 @@
 
 enum STATUS_CODE
 {
+    NOT_FIND = -1,
     ON_SUCCESS,
     NULL_PTR,
     MALLOC_ERROR,
     INVAILD_ACCESS,
 };
-// 链表初始化
+// 静态函数只在源文件起作用
 static int checkPlist(LinkList *pList);
 static int checkPos(LinkList *pList, int pos);
 static int checkMallocNode(LinkNode *Node);
+static int LinkListAccordAppointValGetPos(LinkList *pList, ELEMENTTYPE val, int *pPos);
+
+// 链表初始化
 int LinkListInit(LinkList **pList)
 {
     // 分配内存，判空，初始化
@@ -68,7 +72,7 @@ static int checkPlist(LinkList *pList)
 }
 static int checkPos(LinkList *pList, int pos)
 {
-    if (pos < = 0 || pos > pList->len)
+    if (pos <= 0 || pos > pList->len)
     {
         return INVAILD_ACCESS;
     }
@@ -157,10 +161,35 @@ int LinkListDelAppointPos(LinkList *pList, int pos)
     (pList->len)--;
     return ON_SUCCESS;
 }
-
+// 根据指定元素得到在链表中所在的位置
+static int LinkListAccordAppointValGetPos(LinkList *pList, ELEMENTTYPE val, int *pPos)
+{
+    LinkNode *travelNode = pList->head->next;
+    int pos = 1;
+    for (; pos <= pList->len; pos++)
+    {
+        if (travelNode->data == val)
+        {
+            *pPos = pos;
+            return pos;
+        }
+        travelNode = travelNode->next;
+    }
+    *pPos = NOT_FIND;
+    return NOT_FIND;
+}
 // 链表删除指定数据
 int LinkListDelAppointData(LinkList *pList, ELEMENTTYPE val)
 {
+    int pos = 0;
+    int len = 0;
+    while (LinkListGetLength(pList, &len) && pos != NOT_FIND)
+    {
+        LinkListAccordAppointValGetPos(pList, val, &pos);
+        LinkListDelAppointPos(pList, pos);
+    }
+
+    return ON_SUCCESS;
 }
 
 // 获取链表长度
@@ -178,7 +207,7 @@ int LinkListGetLength(LinkList *pList, int *pSize)
 int LinkListDestroy(LinkList *pList)
 {
     int size = 0;
-    while (LinkListGetLength(pList))
+    while (LinkListGetLength(pList, &size))
     {
         LinkListHeadDel(pList);
     }
