@@ -144,5 +144,19 @@ int LinkListDestroy(LinkList *pList)
 int linkListforeach(LinkList *pList)
 {
     checkPlist(pList);
-    
+    // LinkNode *travelNode = pList->head;
+     LinkNode *travelNode = pList->head->next;
+#if 0//for
+    // for(int idx=0;idx<pList->len;idx++){
+    //     printf("data=%d\n",travelNode->data);
+    //     travelNode=travelNode->next;
+    // }
+#endif
+    while (travelNode->next != NULL)
+    {
+        // travelNode = travelNode->next;
+        printf("data=%d\n", travelNode->data);
+        travelNode = travelNode->next;
+    }
+    return ON_SUCCESS;
 }
