@@ -49,3 +49,8 @@ int LinkListGetLength(LinkList *pList, int *pSize)
 int LinkListDestroy(LinkList *pList)
 {
 }
+
+// 链表遍历
+int linkListforeach(LinkList *pList)
+{
+}
