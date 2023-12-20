@@ -68,7 +68,7 @@ static int checkPlist(LinkList *pList)
 }
 static int checkPos(LinkList *pList, int pos)
 {
-    if (pos < 0 || pos > pList->len)
+    if (pos < = 0 || pos > pList->len)
     {
         return INVAILD_ACCESS;
     }
@@ -111,7 +111,7 @@ int LinkListAppointPosInsert(LinkList *pList, int pos, ELEMENTTYPE val)
     travelNode->next = newNode;
     if (flag)
     {
-        //尾指针更新
+        // 尾指针更新
         pList->tail = newNode;
     }
 
@@ -119,23 +119,43 @@ int LinkListAppointPosInsert(LinkList *pList, int pos, ELEMENTTYPE val)
     newNode->next = NULL;
 
     // 更新链表长度
-    pList->len++;
+    (pList->len)++;
     return ON_SUCCESS;
 }
 
 // 链表头删
 int LinkListHeadDel(LinkList *pList)
 {
+    return LinkListDelAppointPos(pList, 1);
 }
 
 // 链表尾删
 int LinkListTailDel(LinkList *pList)
 {
+    return LinkListDelAppointPos(pList, pList->len);
 }
 
 // 链表指定位置删除
 int LinkListDelAppointPos(LinkList *pList, int pos)
 {
+    checkPlist(pList);
+    checkPos(pList, pos);
+    LinkNode *travelNode = pList->head;
+    while (--pos)
+    {
+        travelNode = travelNode->next;
+    }
+    LinkNode *needDelNode = travelNode->next;
+    travelNode->next = needDelNode->next;
+
+    if (needDelNode != NULL)
+    {
+        free(needDelNode);
+        needDelNode = NULL;
+    }
+
+    (pList->len)--;
+    return ON_SUCCESS;
 }
 
 // 链表删除指定数据
