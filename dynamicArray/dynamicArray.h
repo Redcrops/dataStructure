@@ -1,6 +1,6 @@
 #ifndef __DANAMIC_ARRAY_H_
 #define __DANAMIC_ARRAY_H_
-typedef int ELEMENTTYPE;
+#define ELEMENTTYPE void *
 
 // 避免头文件包含
 
@@ -29,7 +29,7 @@ int dynamicArrayAppointPosData(dynamicArray *pArray, int pos, ELEMENTTYPE val);
 int dynamicArrayDeleteData(dynamicArray *pArray);
 
 // 动态数组删除指定位置数据
-int dynamicArrayDeletePosData(dynamicArray *pArray, int pos);
+int dynamicArrayDeleteAppointPosData(dynamicArray *pArray, int pos);
 
 // 动态数组删除指定元素
 int dynamicArrayDeleteAppointData(dynamicArray *pArray, ELEMENTTYPE val);
@@ -43,7 +43,7 @@ int dynamicArrayGetSize(dynamicArray *pArray, int *pSize);
 // 获取数组的容量
 int dynamicArrayGetCapacity(dynamicArray *pArray, int *pCapacity);
 
-//获取指定位置数值
+// 获取指定位置数值
 int dynamicArrayGetAppointPosVal(dynamicArray *pArray, int pos, ELEMENTTYPE *pVal);
 
 #endif //__DANAMIC_ARRAY_H_
