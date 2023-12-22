@@ -16,7 +16,7 @@ static int checkPlist(DoubleLinkList *pList);
 static int checkPos(DoubleLinkList *pList, int pos);
 static int checkMallocNode(DoubleLinkNode *Node);
 static int DoubleLinkListAccordAppointValGetPos(DoubleLinkList *pList, ELEMENTTYPE val, int *pPos, int (*compareFunc)(ELEMENTTYPE, ELEMENTTYPE));
-
+static DoubleLinkList *createDoubleLinkNode(ELEMENTTYPE val);
 // 链表初始化
 int DoubleLinkListInit(DoubleLinkList **pList)
 {
@@ -43,6 +43,7 @@ int DoubleLinkListInit(DoubleLinkList **pList)
 
     list->head->data = 0;
     list->head->next = NULL;
+    list->head->prev = NULL;
 
     // 初始化的时候尾指针=头指针
     list->tail = list->head;
@@ -85,6 +86,21 @@ static int checkMallocNode(DoubleLinkNode *Node)
     }
     memset(Node, 0, sizeof(DoubleLinkNode) * 1);
 }
+static DoubleLinkList *createDoubleLinkNode(ELEMENTTYPE val)
+{
+    DoubleLinkNode *newNode = (DoubleLinkNode *)malloc(sizeof(DoubleLinkNode) * 1);
+    if (newNode == NULL)
+    {
+        return NULL;
+    }
+    memset(newNode, 0, sizeof(DoubleLinkNode) * 1);
+
+    newNode->data = val;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+    return newNode;
+}
+
 // 链表指定位置插入
 int DoubleLinkListAppointPosInsert(DoubleLinkList *pList, int pos, ELEMENTTYPE val)
 {
@@ -96,12 +112,20 @@ int DoubleLinkListAppointPosInsert(DoubleLinkList *pList, int pos, ELEMENTTYPE v
     }
 
     DoubleLinkNode *travelNode = pList->head;
+
+    // 新建新结点封装成函数
+    DoubleLinkNode *newNode = createDoubleLinkNode(val);
+    if (newNode == NULL)
+    {
+        return MALLOC_ERROR;
+    }
+#if 0
     DoubleLinkNode *newNode = (DoubleLinkNode *)malloc(sizeof(DoubleLinkNode) * 1);
     checkMallocNode(newNode);
 
     newNode->data = val;
     newNode->next = NULL;
-
+#endif
     int flag = 0;
     // 这种情况下需要更改尾指针
     if (pos == pList->len)
@@ -120,6 +144,8 @@ int DoubleLinkListAppointPosInsert(DoubleLinkList *pList, int pos, ELEMENTTYPE v
     }
     // 修改节点指向
     newNode->next = travelNode->next;
+    newNode->prev = travelNode;
+    travelNode->next->prev = newNode;
     travelNode->next = newNode;
     if (flag)
     {
