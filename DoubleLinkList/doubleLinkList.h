@@ -53,5 +53,7 @@ int DoubleLinkListDestroy(DoubleLinkList *pList);
 
 // 遍历链表
 int DoubleLinkListForeach(DoubleLinkList *pList, int (*printFunc)(ELEMENTTYPE));
-// int DoubleLinkListForeach(DoubleLinkList *pList);
+
+// 双向链表逆序打印
+int DoubleLinkListReverseForeach(DoubleLinkList *pList, int (*printFunc)(ELEMENTTYPE));
 #endif //__DoubleLinkList_H_

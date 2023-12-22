@@ -93,7 +93,7 @@ static DoubleLinkList *createDoubleLinkNode(ELEMENTTYPE val)
     {
         return NULL;
     }
-    memset(Node, 0, sizeof(DoubleLinkNode) * 1);
+    memset(newNode, 0, sizeof(DoubleLinkNode) * 1);
 
     newNode->data = val;
     newNode->next = NULL;
@@ -179,10 +179,10 @@ int DoubleLinkListDelAppointPos(DoubleLinkList *pList, int pos)
     {
         return INVAILD_ACCESS;
     }
-   
+
     if (pos == pList->len)
     {
-       
+
         DoubleLinkList *tempNode = pList->tail;
         pList->tail = pList->tail->prev;
         needDelNode = tempNode;
@@ -299,5 +299,19 @@ int DoubleLinkListForeach(DoubleLinkList *pList, int (*printFunc)(ELEMENTTYPE))
         // travelNode = travelNode->next;
     }
     printf("\n");
+    return ON_SUCCESS;
+}
+
+/*双向链表逆序打印*/
+int DoubleLinkListReverseForeach(DoubleLinkList *pList, int (*printFunc)(ELEMENTTYPE))
+{
+
+    checkPlist(pList);
+    DoubleLinkNode *travelNode = pList->tail;
+    while (travelNode != pList->head)
+    {
+        printFunc(travelNode->data);
+        travelNode = travelNode->prev;
+    }
     return ON_SUCCESS;
 }
