@@ -146,7 +146,6 @@ int DoubleLinkListAppointPosInsert(DoubleLinkList *pList, int pos, ELEMENTTYPE v
     // 修改节点指向
     newNode->next = travelNode->next; // 1
     newNode->prev = travelNode;       // 2
-     
     travelNode->next = newNode;       // 4
     if (flag)
     {
@@ -175,26 +174,27 @@ int DoubleLinkListTailDel(DoubleLinkList *pList)
 int DoubleLinkListDelAppointPos(DoubleLinkList *pList, int pos)
 {
     checkPlist(pList);
+    DoubleLinkNode *needDelNode = NULL;
     if (pos <= 0 && pos > pList->len)
     {
         return INVAILD_ACCESS;
     }
-    int flag = 0;
+   
     if (pos == pList->len)
     {
-        flag = 1;
+       
+        DoubleLinkList *tempNode = pList->tail;
+        pList->tail = pList->tail->prev;
+        needDelNode = tempNode;
     }
     DoubleLinkNode *travelNode = pList->head;
     while (--pos)
     {
         travelNode = travelNode->next;
     }
-    DoubleLinkNode *needDelNode = travelNode->next;
+    needDelNode = travelNode->next;
     travelNode->next = needDelNode->next;
-    if (flag)
-    {
-        pList->tail = travelNode;
-    }
+    needDelNode->next->prev = travelNode;
 
     if (needDelNode != NULL)
     {
