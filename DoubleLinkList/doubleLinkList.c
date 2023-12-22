@@ -93,7 +93,7 @@ static DoubleLinkList *createDoubleLinkNode(ELEMENTTYPE val)
     {
         return NULL;
     }
-    memset(newNode, 0, sizeof(DoubleLinkNode) * 1);
+    memset(Node, 0, sizeof(DoubleLinkNode) * 1);
 
     newNode->data = val;
     newNode->next = NULL;
@@ -141,12 +141,13 @@ int DoubleLinkListAppointPosInsert(DoubleLinkList *pList, int pos, ELEMENTTYPE v
         {
             travelNode = travelNode->next;
         }
+        travelNode->next->prev = newNode; // 3   //解决空链表和尾插不行的情况
     }
     // 修改节点指向
-    newNode->next = travelNode->next;
-    newNode->prev = travelNode;
-    travelNode->next->prev = newNode;
-    travelNode->next = newNode;
+    newNode->next = travelNode->next; // 1
+    newNode->prev = travelNode;       // 2
+     
+    travelNode->next = newNode;       // 4
     if (flag)
     {
         // 尾指针更新
