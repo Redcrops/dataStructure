@@ -4,9 +4,9 @@
 typedef struct BSTreeNode
 {
     ELEMENTTYPE val;
-    struct BSTreeNode *left;  /*左子树*/
-    struct BSTeeNode *right;  /*右子树*/
-    struct BSTeeNode *parent; /*父结点*/
+    struct BSTreeNode *left;   /*左子树*/
+    struct BSTreeNode *right;  /*右子树*/
+    struct BSTreeNode *parent; /*父结点*/
 } BSTreeNode;
 typedef struct BinarySearchTree
 {
