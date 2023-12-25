@@ -26,7 +26,7 @@ int binarySearchTreeInit(BinarySearchTree **pBstree, int (*comparaFunc)(ELEMENTT
 int binarySearchTreeInsertVal(BinarySearchTree *pBstree, ELEMENTTYPE val);
 
 // 二叉搜索树是否包含指定元素
-int binarySearchTreeContainAppointVal(BinarySearchTree *pBstree, ELEMENTTYPE val, );
+int binarySearchTreeContainAppointVal(BinarySearchTree *pBstree, ELEMENTTYPE val);
 
 // 二叉搜索树的前序遍历
 int binarySearchTreePreOrderTravel(BinarySearchTree *pBstree);
