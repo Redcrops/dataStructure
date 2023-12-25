@@ -19,7 +19,7 @@ static BSTreeNode *createBSTreeNode(ELEMENTTYPE val, BSTreeNode *parentNode);
 // 根据指定值获得二叉搜索树的结点
 static BSTreeNode *baseAppointValGetNode(BinarySearchTree *pBstree, ELEMENTTYPE val);
 // 二叉搜索树初始化
-int binarySearchTreeInit(BinarySearchTree **pBstree)
+int binarySearchTreeInit(BinarySearchTree **pBstree, int (*comparaFunc)(ELEMENTTYPE val1, ELEMENTTYPE val2))
 {
     /*为树分配空间*/
     BinarySearchTree *bstree = (BinarySearchTree *)malloc(sizeof(BinarySearchTree) * 1);
@@ -32,6 +32,9 @@ int binarySearchTreeInit(BinarySearchTree **pBstree)
 
     bstree->root = NULL;
     bstree->size = 0;
+
+    /*钩子函数在这边赋值*/
+    bstree->comparaFunc = comparaFunc;
 #if 0 /*为根节点分配空间*/
     // /*为根节点分配空间*/
     // bstree->root = (BSTreeNode *)malloc(sizeof(BSTreeNode) * 1);
@@ -107,7 +110,7 @@ static BSTreeNode *createBSTreeNode(ELEMENTTYPE val, BSTreeNode *parentNode)
 }
 
 // 二叉搜索树的插入
-int binarySearchTreeInsertVal(BinarySearchTree *pBstree, ELEMENTTYPE val, int (*comparaFunc)(ELEMENTTYPE val1, ELEMENTTYPE val2))
+int binarySearchTreeInsertVal(BinarySearchTree *pBstree, ELEMENTTYPE val)
 {
     if (pBstree == NULL)
     {
@@ -130,7 +133,7 @@ int binarySearchTreeInsertVal(BinarySearchTree *pBstree, ELEMENTTYPE val, int (*
     {
         // 标记待插入位置的父节点
         parentNode = travelNode;
-        cmp = comparaFunc(val, travelNode->data);
+        cmp = pBstree->comparaFunc(val, travelNode->data);
 
         /*确定travelnode的移动方向*/
         if (cmp < 0)
@@ -169,13 +172,29 @@ int binarySearchTreeInsertVal(BinarySearchTree *pBstree, ELEMENTTYPE val, int (*
 static BSTreeNode *baseAppointValGetNode(BinarySearchTree *pBstree, ELEMENTTYPE val)
 {
     BSTreeNode *travelNode = pBstree->root;
+    int cmp = 0;
     while (travelNode != NULL)
     {
+        cmp = pBstree->comparaFunc(val, travelNode->data);
+        if (cmp < 0)
+        {
+            travelNode = travelNode->left;
+        }
+        else if (cmp > 0)
+        {
+            travelNode = travelNode->right;
+        }
+        else
+        {
+            return travelNode;
+        }
     }
+    return NULL;
 }
 // 二叉搜索树是否包含指定元素
 int binarySearchTreeContainAppointVal(BinarySearchTree *pBstree, ELEMENTTYPE val)
 {
+
     return ON_SUCCESS;
 }
 // 二叉搜索树的前序遍历
