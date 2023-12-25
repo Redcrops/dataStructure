@@ -52,6 +52,23 @@ static int checkBstree(BinarySearchTree *pBstree)
         return NULL_PTR;
     }
 }
+static int comparaFunc(ELEMENTTYPE val1, ELEMENTTYPE val2)
+{
+    // if (val1 < val2)
+    // {
+    //     return -1;
+    // }
+    // else if (val1 > val2)
+    // {
+    //     return 1;
+    // }
+    // else
+    // {
+    //     return 0;
+    // }
+
+    return val1 - val2;
+}
 // 二叉搜索树的插入
 int binarySearchTreeInsert(BinarySearchTree *pBstree, ELEMENTTYPE val)
 {
@@ -66,18 +83,6 @@ int binarySearchTreeInsert(BinarySearchTree *pBstree, ELEMENTTYPE val)
         return ON_SUCCESS;
     }
 
-    // BSTreeNode *insertNode = (BSTreeNode *)malloc(sizeof(BSTreeNode) * 1);
-    // if (insertNode == NULL)
-    // {
-    //     return MALLOC_ERROR;
-    // }
-    // memset(insertNode, 0, sizeof(BSTreeNode) * 1);
-
-    // insertNode->data = val;
-    // insertNode->left = NULL;
-    // insertNode->right = NULL;
-    // insertNode->parent = NULL;
-
     BSTreeNode *travelNode = pBstree->root;
     BSTreeNode *parentNode = pBstree->root;
 
@@ -88,7 +93,7 @@ int binarySearchTreeInsert(BinarySearchTree *pBstree, ELEMENTTYPE val)
     {
         // 标记待插入位置的父节点
         parentNode = travelNode;
-        cmp = val - travelNode->data;
+        cmp = comparaFunc(val, travelNode->data);
         if (cmp < 0)
         {
             travelNode = travelNode->left;
@@ -102,14 +107,33 @@ int binarySearchTreeInsert(BinarySearchTree *pBstree, ELEMENTTYPE val)
             return ON_SUCCESS;
         }
     }
-    if (cmp < 0)
+    /*分配新节点
+     */
+    BSTreeNode *newBstNode = (BSTreeNode *)malloc(sizeof(BSTreeNode) * 1);
+    if (newBstNode == NULL)
     {
-        parentNode->left = (val的节点);
+        return MALLOC_ERROR;
+    }
+    memset(newBstNode, 0, sizeof(BSTreeNode) * 1);
+
+    newBstNode->data = val;
+    newBstNode->left = NULL;
+    newBstNode->right = NULL;
+    newBstNode->parent = NULL;
+
+    /*新节点赋值*/
+    newBstNode->data = val;
+
+    if (cmp < 0)
+    { /*挂在左子树*/
+        parentNode->left = newBstNode;
     }
     else
-    {
-        parentNode->right = (val的节点);
+    { /*挂在右子树*/
+        parentNode->right = newBstNode;
     }
 
+    newBstNode->parent = parentNode;
+    (pBstree->size)++;
     return ON_SUCCESS;
 }
