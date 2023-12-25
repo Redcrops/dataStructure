@@ -20,7 +20,7 @@ static BSTreeNode *createBSTreeNode(ELEMENTTYPE val, BSTreeNode *parentNode);
 // 根据指定值获得二叉搜索树的结点
 static BSTreeNode *baseAppointValGetNode(BinarySearchTree *pBstree, ELEMENTTYPE val);
 // 二叉搜索树初始化
-int binarySearchTreeInit(BinarySearchTree **pBstree, int (*comparaFunc)(ELEMENTTYPE val1, ELEMENTTYPE val2))
+int binarySearchTreeInit(BinarySearchTree **pBstree, int (*comparaFunc)(ELEMENTTYPE val1, ELEMENTTYPE val2), int (*printFunc)(ELEMENTTYPE val))
 {
     /*为树分配空间*/
     BinarySearchTree *bstree = (BinarySearchTree *)malloc(sizeof(BinarySearchTree) * 1);
@@ -35,7 +35,10 @@ int binarySearchTreeInit(BinarySearchTree **pBstree, int (*comparaFunc)(ELEMENTT
     bstree->size = 0;
 
     /*钩子函数在这边赋值*/
+    /*比较函数*/
     bstree->comparaFunc = comparaFunc;
+    /*打印函数*/
+    bstree->printFunc = printFunc;
 #if 0 /*为根节点分配空间*/
     // /*为根节点分配空间*/
     // bstree->root = (BSTreeNode *)malloc(sizeof(BSTreeNode) * 1);
@@ -212,7 +215,7 @@ int binarySearchTreePostOrderTravel(BinarySearchTree *pBstree)
 }
 
 // 二叉搜索树的层次遍历
-// int binarySearchTreeLevelOrderTravel(BinarySearchTree *pBstree,int (*pirntFunc)(ELEMENTTYPE val))
+
 int binarySearchTreeLevelOrderTravel(BinarySearchTree *pBstree)
 {
     DoubleLinkListQueue *pQueue = NULL;
@@ -223,8 +226,8 @@ int binarySearchTreeLevelOrderTravel(BinarySearchTree *pBstree)
     {
 
         doubleLinkListQueueTop(pQueue, (void *)&popNode);
-        // printFunc(popNode->data);
-        printf("popNode->data=%d", popNode->data);
+        // 使用回调函数
+        pBstree->printFunc(popNode->data);
         doublelinklistQueuePop(pQueue);
         /*左子树入队*/
         if (popNode->left != NULL)
