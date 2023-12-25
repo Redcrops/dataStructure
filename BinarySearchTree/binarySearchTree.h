@@ -3,7 +3,7 @@
 #define ELEMENTTYPE void *
 typedef struct BSTreeNode
 {
-    ELEMENTTYPE val;
+    ELEMENTTYPE data;
     struct BSTreeNode *left;   /*左子树*/
     struct BSTreeNode *right;  /*右子树*/
     struct BSTreeNode *parent; /*父结点*/

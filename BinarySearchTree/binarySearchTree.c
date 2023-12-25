@@ -38,18 +38,78 @@ int binarySearchTreeInit(BinarySearchTree **pBstree)
     bstree->root->left = NULL;
     bstree->root->parent = NULL;
     bstree->root->right = NULL;
-    bstree->root->val = 0;
+    bstree->root->data = 0;
 
     /*解引用*/
     *pBstree = bstree;
-    
+
     return ON_SUCCESS;
 }
-
+static int checkBstree(BinarySearchTree *pBstree)
+{
+    if (pBstree == NULL)
+    {
+        return NULL_PTR;
+    }
+}
 // 二叉搜索树的插入
 int binarySearchTreeInsert(BinarySearchTree *pBstree, ELEMENTTYPE val)
 {
-    int ret = 0;
+    if (pBstree == NULL)
+    {
+        return NULL_PTR;
+    }
+    if (pBstree->size == 0)
+    {
+        (pBstree->size)++;
+        pBstree->root->data = val;
+        return ON_SUCCESS;
+    }
 
-    return ret;
+    // BSTreeNode *insertNode = (BSTreeNode *)malloc(sizeof(BSTreeNode) * 1);
+    // if (insertNode == NULL)
+    // {
+    //     return MALLOC_ERROR;
+    // }
+    // memset(insertNode, 0, sizeof(BSTreeNode) * 1);
+
+    // insertNode->data = val;
+    // insertNode->left = NULL;
+    // insertNode->right = NULL;
+    // insertNode->parent = NULL;
+
+    BSTreeNode *travelNode = pBstree->root;
+    BSTreeNode *parentNode = pBstree->root;
+
+    /*确定符号：到底放在左边还是右边*/
+    int cmp = 0;
+
+    while (travelNode != NULL)
+    {
+        // 标记待插入位置的父节点
+        parentNode = travelNode;
+        cmp = val - travelNode->data;
+        if (cmp < 0)
+        {
+            travelNode = travelNode->left;
+        }
+        else if (cmp > 0)
+        {
+            travelNode = travelNode->right;
+        }
+        else
+        {
+            return ON_SUCCESS;
+        }
+    }
+    if (cmp < 0)
+    {
+        parentNode->left = (val的节点);
+    }
+    else
+    {
+        parentNode->right = (val的节点);
+    }
+
+    return ON_SUCCESS;
 }
