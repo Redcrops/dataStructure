@@ -341,6 +341,7 @@ static BSTreeNode *bstreeNodePreDecessor(BSTreeNode *node)
         }
         return travelNode;
     }
+    /*程序到这个地方，说明一定没有左子树，那就需要向父结点找*/
     else
     {
         /*没有左子树且为根节点*/
@@ -353,9 +354,14 @@ static BSTreeNode *bstreeNodePreDecessor(BSTreeNode *node)
         {
             node = node->parent;
         }
+        /*退出这个循环有两种情况*/
+        /*node->parent == NULL*/
+        /*node == node->parent->right*/
         return node->parent;
     }
-    /*程序到这里一定是度为1或者度为0的*/
+    /*退出这个循环有两种情况
+    node->parent != NULL
+    node == node->parent->right*/
 }
 // 获取当前结点的后继节点
 static BSTreeNode *bstreeNodeSuccessor(BSTreeNode *node)
