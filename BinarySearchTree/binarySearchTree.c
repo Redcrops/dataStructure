@@ -366,6 +366,7 @@ static BSTreeNode *bstreeNodeSuccessor(BSTreeNode *node)
 int binarySearchTreeGetHeight(BinarySearchTree *pBstree, int *pHeight)
 {
     DoubleLinkListQueue *pQueue = NULL;
+    doublelinklistQueueInit(pQueue);
     doubleLinkListQueuePush(pQueue, pBstree->root);
     int height = 0;
     int size = 1;
@@ -410,4 +411,55 @@ int binarySearchTreeDelete(BinarySearchTree *pBstree, ELEMENTTYPE val)
     {
         BSTreeNode *preNode = precursorNode(currentNode);
     }
+}
+/*二叉搜索树的销毁*/
+int binarySearchTreeDestroy(BinarySearchTree *pBstree)
+{
+    if (pBstree == NULL)
+    {
+        return NULL_PTR;
+    }
+    DoubleLinkListQueue *pQueue = NULL;
+    doublelinklistQueueInit(pQueue);
+    doubleLinkListQueuePush(pQueue, pBstree->root);
+    BSTreeNode *popNode = NULL;
+    while (!doublelinklistQueueIsEmpty(pQueue))
+    {
+        doubleLinkListQueueTop(pQueue, (void **)&popNode);
+        doublelinklistQueuePop(pQueue);
+#if 0 // 不可以先释放，因为左右孩子还没有入队
+        /*释放结点*/
+        if (popNode != NULL)
+        {
+            free(popNode);
+            popNode == NULL;
+        }
+#endif
+        /*左子树不为空，入队*/
+        if (popNode->left != NULL)
+        {
+            doubleLinkListQueuePush(pQueue, popNode->left);
+        }
+
+        /*右子树不为空，入队*/
+        if (popNode->right != NULL)
+        {
+            doubleLinkListQueuePush(pQueue, popNode->right);
+        }
+
+        /*释放结点*/
+        if (popNode != NULL)
+        {
+            free(popNode);
+            popNode == NULL;
+        }
+    }
+    if (pBstree != NULL)
+    {
+        free(pBstree);
+        pBstree == NULL;
+    }
+    /*释放队列*/
+    doubleLinkListQueueDestroy(pQueue);
+    return ON_SUCCESS;
 }
